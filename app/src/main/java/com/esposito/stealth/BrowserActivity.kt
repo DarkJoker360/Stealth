@@ -4,11 +4,13 @@ package com.esposito.stealth
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -47,6 +49,7 @@ import com.esposito.stealth.ui.BrowserControls
 import com.esposito.stealth.ui.theme.StealthTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URISyntaxException
 
 class BrowserActivity : ComponentActivity() {
 
@@ -155,6 +158,22 @@ fun WebViewContainer(ctx: Context, url: String) {
                                     delay(5000L)
                                     isScrolling.value = false
                                 }
+                            }
+                        }
+                        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                            val urlAddress = request?.url.toString()
+                            return if (urlAddress.startsWith("intent://")) {
+                                try {
+                                    val intent = Intent.parseUri(urlAddress, Intent.URI_INTENT_SCHEME)
+                                    if (intent != null) {
+                                        view?.context?.startActivity(intent)
+                                    }
+                                    true
+                                } catch (e: URISyntaxException) {
+                                    false
+                                }
+                            } else {
+                                super.shouldOverrideUrlLoading(view, request)
                             }
                         }
                     }
