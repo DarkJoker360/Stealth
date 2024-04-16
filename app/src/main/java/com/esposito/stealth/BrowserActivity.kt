@@ -5,6 +5,7 @@ package com.esposito.stealth
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -52,11 +53,14 @@ import kotlinx.coroutines.launch
 import java.net.URISyntaxException
 
 class BrowserActivity : ComponentActivity() {
-
+// TODO: implement rotation without activity restart + more search engines
     override fun onCreate(savedInstanceState: Bundle?) {
         StealthUtils.init(this)
         if (StealthSettings.getSetting(this, "should_block_screenshots")) {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                setRecentsScreenshotEnabled(false)
+            }
         }
         super.onCreate(savedInstanceState)
         setContent {
