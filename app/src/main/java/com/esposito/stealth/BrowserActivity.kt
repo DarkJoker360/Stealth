@@ -194,6 +194,7 @@ fun WebViewContainer(ctx: Context, url: String) {
                     settings.javaScriptCanOpenWindowsAutomatically = false
                     settings.databaseEnabled = false
                     settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                    settings.userAgentString = BrowserUtils.getUserAgent()
 
                     setDownloadListener { _, _, _, _, _ -> /* Block downloads */ }
                     clearCache(true)
