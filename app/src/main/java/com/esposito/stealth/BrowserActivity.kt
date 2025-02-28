@@ -190,10 +190,10 @@ fun WebViewContainer(ctx: Context, url: String) {
                     settings.useWideViewPort = true
                     settings.mediaPlaybackRequiresUserGesture = true
                     settings.allowContentAccess = true
-                    settings.pluginState = WebSettings.PluginState.OFF
-                    settings.domStorageEnabled = false
+                    settings.pluginState = WebSettings.PluginState.ON
+                    settings.domStorageEnabled = true
                     settings.javaScriptCanOpenWindowsAutomatically = false
-                    settings.databaseEnabled = false
+                    settings.databaseEnabled = true
                     settings.cacheMode = WebSettings.LOAD_NO_CACHE
                     if (StealthSettings.getSetting(ctx, "should_randomize_user_agent")) {
                         settings.userAgentString = BrowserUtils.getUserAgent()
