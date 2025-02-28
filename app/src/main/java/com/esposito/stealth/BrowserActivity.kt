@@ -189,8 +189,17 @@ fun WebViewContainer(ctx: Context, url: String) {
                     settings.useWideViewPort = true
                     settings.mediaPlaybackRequiresUserGesture = true
                     settings.allowContentAccess = true
-                    settings.pluginState = WebSettings.PluginState.ON
-                    settings.domStorageEnabled = true
+                    settings.pluginState = WebSettings.PluginState.OFF
+                    settings.domStorageEnabled = false
+                    settings.javaScriptCanOpenWindowsAutomatically = false
+                    settings.databaseEnabled = false
+                    settings.cacheMode = WebSettings.LOAD_NO_CACHE
+
+                    setDownloadListener { _, _, _, _, _ -> /* Block downloads */ }
+                    clearCache(true)
+                    clearHistory()
+                    clearFormData()
+                    cookieManager.setAcceptCookie(false)
                     loadUrl(url)
                 }
             }
