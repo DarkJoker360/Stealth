@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.CookieManager
@@ -194,7 +195,9 @@ fun WebViewContainer(ctx: Context, url: String) {
                     settings.javaScriptCanOpenWindowsAutomatically = false
                     settings.databaseEnabled = false
                     settings.cacheMode = WebSettings.LOAD_NO_CACHE
-                    settings.userAgentString = BrowserUtils.getUserAgent()
+                    if (StealthSettings.getSetting(ctx, "should_randomize_user_agent")) {
+                        settings.userAgentString = BrowserUtils.getUserAgent()
+                    }
 
                     setDownloadListener { _, _, _, _, _ -> /* Block downloads */ }
                     clearCache(true)

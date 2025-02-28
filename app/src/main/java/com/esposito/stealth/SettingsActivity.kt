@@ -73,6 +73,7 @@ private fun Header(text: String) {
 fun Settings(ctx: Context) {
     var shouldEnableJS by remember { mutableStateOf(StealthSettings.getSetting(ctx, "should_enable_js")) }
     var shouldBlockScreenshot by remember { mutableStateOf(StealthSettings.getSetting(ctx, "should_block_screenshots")) }
+    var shouldRandomizeUserAgent by remember { mutableStateOf(StealthSettings.getSetting(ctx, "should_randomize_user_agent")) }
 
     Row (modifier = Modifier.fillMaxWidth()) {
         Text(ctx.getString(R.string.settings_enable_js),
@@ -110,6 +111,24 @@ fun Settings(ctx: Context) {
             )
         )
     }
+    Row (modifier = Modifier.fillMaxWidth()) {
+        Text("Randomize User Agent",
+            modifier = Modifier.padding(12.dp),
+            textAlign = TextAlign.Left,
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Switch(
+            checked = shouldRandomizeUserAgent,
+            onCheckedChange = { shouldRandomizeUserAgent = it },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
+                uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+            )
+        )
+    }
     Box(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         contentAlignment = Alignment.BottomCenter
@@ -118,6 +137,7 @@ fun Settings(ctx: Context) {
             Button(onClick = {
                 shouldEnableJS = true
                 shouldBlockScreenshot = false
+                shouldRandomizeUserAgent = true
                 StealthSettings.initSettings(ctx)
                 Toast.makeText(ctx, ctx.getString(R.string.dialog_settings_applied), Toast.LENGTH_SHORT).show()
                 StealthUtils.restartApp(ctx)
@@ -126,7 +146,7 @@ fun Settings(ctx: Context) {
             }
             Spacer(modifier = Modifier.width(5.dp))
             Button(onClick = {
-                StealthSettings.applySettings(ctx, shouldEnableJS, shouldBlockScreenshot)
+                StealthSettings.applySettings(ctx, shouldEnableJS, shouldBlockScreenshot, shouldRandomizeUserAgent)
                 Toast.makeText(ctx, ctx.getString(R.string.dialog_settings_applied), Toast.LENGTH_SHORT).show()
                 StealthUtils.restartApp(ctx)
             }) {
